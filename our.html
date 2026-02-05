@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Anniversary Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background: #000;
+            color: #FFF;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+        .screen {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            border: 4px solid #FFF;
+            background: #222;
+            max-width: 800px;
+            box-shadow: 0 0 20px #FFF;
+        }
+        .intro-screen {
+            display: block;
+        }
+        h1 {
+            color: #FFD700;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .game-btn {
+            background: #FFD700;
+            border: 4px solid #FFF;
+            color: #000;
+            padding: 15px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 10px;
+            box-shadow: 0 0 10px #FFD700;
+        }
+        .game-btn:hover {
+            background: #FFA500;
+        }
+        .name-input {
+            margin: 20px 0;
+        }
+        .name-input input {
+            padding: 10px;
+            font-size: 1em;
+            border: 4px solid #FFF;
+            background: #000;
+            color: #FFF;
+            text-align: center;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 800px;
+            margin: 20px;
+        }
+        .level-button {
+            background: #00FF00;
+            border: 4px solid #FFF;
+            padding: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            box-shadow: 0 0 10px #00FF00;
+            text-align: center;
+        }
+        .level-button:hover {
+            background: #32CD32;
+        }
+        .level-button.completed {
+            background: #FFD700;
+            color: #000;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #222;
+            border: 4px solid #FFF;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 20px #FFF;
+            text-align: left;
+            position: relative;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #FFF;
+        }
+        .next-btn {
+            background: #FFD700;
+            color: #000;
+            border: 4px solid #FFF;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+        .next-btn:hover {
+            background: #FFA500;
+        }
+        .ending-screen {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            background: #222;
+            border: 4px solid #FFF;
+            max-width: 700px;
+            box-shadow: 0 0 20px #FFF;
+        }
+        .ending-screen h2 {
+            color: #FFD700;
+            font-size: 1.5em;
+        }
+        .ending-screen p {
+            font-size: 0.8em;
+            line-height: 1.6;
+            color: #FFF;
+        }
+        .cute-image {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 2em;
+        }
+        @media (max-width: 600px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Intro Screen -->
+    <div id="intro" class="screen intro-screen">
+        <h1>Do You Want to Play a Game?</h1>
+        <button class="game-btn" onclick="showNameInput()">Yes</button>
+        <div id="name-section" style="display: none;">
+            <h1>Enter Your Partner's Name</h1>
+            <div class="name-input">
+                <input type="text" id="partnerName" placeholder="e.g., Bii" maxlength="20">
+            </div>
+            <button class="game-btn" onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+
+    <!-- Levels Screen -->
+    <div id="levels" class="screen">
+        <h1>Choose a Level</h1>
+        <div class="container">
+            <div class="level-button" id="level1" onclick="openLevel(1)">1</div>
+            <div class="level-button" id="level2" onclick="openLevel(2)">2</div>
+            <div class="level-button" id="level3" onclick="openLevel(3)">3</div>
+            <div class="level-button" id="level4" onclick="openLevel(4)">4</div>
+            <div class="level-button" id="level5" onclick="openLevel(5)">5</div>
+            <div class="level-button" id="level6" onclick="openLevel(6)">6</div>
+            <div class="level-button" id="level7" onclick="openLevel(7)">7</div>
+            <div class="level-button" id="level8" onclick="openLevel(8)">8</div>
+            <div class="level-button" id="level9" onclick="openLevel(9)">9</div>
+            <div class="level-button" id="level10" onclick="openLevel(10)">10</div>
+            <div class="level-button" id="level11" onclick="openLevel(11)">11</div>
+            <div class="level-button" id="level12" onclick="openLevel(12)">12</div>
+        </div>
+    </div>
+
+    <!-- Modals for each level (letter) -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(1)">&times;</span>
+            <h2>Level 1</h2>
+            <div class="cute-image">❤️</div>
+            <p id="letter1">our first month was honestly a mess—in the best way possible. Two people with zero experience, zero confidence, and zero idea what we were doing, suddenly deciding to care about each other deeply. Everything felt like a big deal. Every interaction had weight. Every message felt like it needed to be reread ten times before sending. We were both constantly asking ourselves if we were doing things “right,” even though we didn’t even know what “right” looked like.</p>
+            <p>Holding hands maoy kabuang naq sauna, awkward kaayo etT-T , hesitant, and way too intentional. atay moduol ang kamot, kwaon balik, i duol nasad murag ga away. Like we forgot how hands were supposed to work. And once we were holding hands, neither of us wanted to let go, but we also didn’t want to acknowledge it because that would make it more embarrassing. We’d just pretend nothing was happening</p>
+            <p>Calling each other pet names was a whole different struggle. Typing “[NAME]” YAWA KA CRINGE  Like crossing a boundary we weren’t sure existed. I’d type it, delete it, type it again, stare at the screen, then finally send it and immediately regret everything ning ana q ka buang sauna. Hearing you call me a pet name back made me feel stupidly happy, but also weirdly shy, like I didn’t know where to put that feeling yet.</p>
+            <p>What makes this month special isn’t that it was perfect, it was very clumsy but it was t it was honest. We didn’t act cool. We didn’t pretend we had experience. We were nervous, clumsy, shy, and trying our best. That awkwardness was proof that this mattered to us. We were learning love from scratch, together, and even though it was embarrassing, it was real. That month will always be my favorite kind of chaos.</p>
+            <button class="next-btn" onclick="completeLevel(1)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(2)">&times;</span>
+            <h2>Level 2</h2>
+            <div class="cute-image">💑</div>
+            <p>kani nga month kay okay2 ra, this month felt like a continuation of the awkwardness, but with a little more confidence. We were still shy, still blushing over small things, still overthinking, but now there was a pattern. A routine. We kind of knew what to expect from each other, and that made things feel safer.</p>
+            <p>Good morning and good night messages became normal instead of weird, Updates didn’t feel forced anymore. Holding hands was still embarrassing, but now it came with a smile instead of panic. char ka may naq mo english oy . We didn’t pull away as fast. We didn’t question it as much.</p>
+            <p>Pet names still made us laugh, still made us feel shy, but we didn’t avoid them anymore. It felt like we were slowly allowing ourselves to enjoy what we had instead of constantly worrying about it.</p>
+            <button class="next-btn" onclick="completeLevel(2)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(3)">&times;</span>
+            <h2>Level 3</h2>
+            <div class="cute-image">😊</div>
+            <p>By the third month, the awkwardness didn’t disappear, it just changed. It became familiar. We knew we were awkward, and instead of being embarrassed by it, we started laughing about it. That alone made everything lighter.</p>
+            <p>We talked more freely. Shared random thoughts without filtering them first. We didn’t feel the need to impress each other all the time. Silence didn’t feel uncomfortable anymore, it felt peaceful.</p>
+            <p>This was the month where I started realizing that being with you didn’t drain me. It calmed me. And that was new.</p>
+            <button class="next-btn" onclick="completeLevel(3)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(4)">&times;</span>
+            <h2>Level 4</h2>
+            <div class="cute-image">🌸</div>
+            <p>something shifted this month. It finally settled in my head that this wasn’t just a phase or a crush, we were actually together. For real. And that realization was both comforting and exciting.</p>
+            <p>Holding hands felt natural. Calling you [NAME] didn’t make me hesitate anymore. I wasn’t constantly checking myself or questioning every move. I just enjoyed being close to you.</p>
+            <p>This was the month where “us” stopped feeling fragile and started feeling solid. char oa ra</p>
+            <button class="next-btn" onclick="completeLevel(4)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal5" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(5)">&times;</span>
+            <h2>Level 5</h2>
+            <div class="cute-image">☕</div>
+            <p>This month was quiet in the best way. No pressure. No rushing. Just warmth. Being with you felt easy, like I could relax and breathe.</p>
+            <p>I didn’t feel the need to be someone else around you. I didn’t feel judged. I just felt accepted. And that meant more to me than grand gestures ever could.</p>
+            <p>This was the month where love felt gentle.</p>
+            <button class="next-btn" onclick="completeLevel(5)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal6" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(6)">&times;</span>
+            <h2>Level 6</h2>
+            <div class="cute-image">🎶</div>
+            <p>Half a year with you. By now, nothing felt forced. Talking to you felt automatic. Loving you felt normal, in the best way.</p>
+            <p>There was no more second-guessing. No more “is this okay?” thoughts. Everything just flowed. And that kind of comfort doesn’t happen overnight,it’s built.</p>
+            <p>This month made me proud of how far we’d come p.s mura syag lyric sa this is what it sounds like sa kpop demon hunters</p>
+            <button class="next-btn" onclick="completeLevel(6)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal7" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(7)">&times;</span>
+            <h2>Level 7</h2>
+            <div class="cute-image">🌙</div>
+            <p>This month, we saw more layers of each other. Not just the fun, happy parts—but the tired days, the quiet moods, the moments when things weren’t easy.</p>
+            <p>And instead of walking away from that, we stayed. We listened. We learned. That meant more to me than anything else.</p>
+            <button class="next-btn" onclick="completeLevel(7)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal8" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(8)">&times;</span>
+            <h2>Level 8</h2>
+            <div class="cute-image">🥒</div>
+            <p>Not every moment was perfect—and that’s okay. What mattered was that we kept choosing each other.</p>
+            <p>We learned how to communicate better. How to understand each other without needing everything spelled out. How to be patient.</p>
+            <p>That’s love growing. eat zuchini eat zuchini</p>
+            <button class="next-btn" onclick="completeLevel(8)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal9" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(9)">&times;</span>
+            <h2>Level 9</h2>
+            <div class="cute-image">🔮</div>
+            <p>By this point, we weren’t fragile anymore. We were steady. Secure. Confident.</p>
+            <p>I felt safe with you. Sure of you. Sure of us. And that feeling is rare. we broke into a million peices and we cant go back but now were seeing all the beuty it the broken glass</p>
+            <button class="next-btn" onclick="completeLevel(9)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal10" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(10)">&times;</span>
+            <h2>Level 10</h2>
+            <div class="cute-image">😄</div>
+            <p>This month was just happy. No big reason. No special occasion. Just happiness existing.</p>
+            <p>You made ordinary days feel lighter. Just talking to you could change my whole mood. You felt like my person.</p>
+            <button class="next-btn" onclick="completeLevel(10)">Complete Level</button>
+        </div>
+    </div>
+
+    <div id="modal11" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLevel(11)">&times;</span>
+            <h2>Level 11</h2>
+            <div class="cute-image">🙏</div>
+            <p>This month made me reflect a lot. On how lucky I am. On how grateful I am for you.</p>
+            <p>For your patience. Your love. Your consistency. Thank you for
